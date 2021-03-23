@@ -66,4 +66,4 @@ EnableLog=1
 
 【Excelによる集計例】
 
-![Excel](./img/Excel.png "Excel")
+![Excel](./img/excel.png "Excel")
