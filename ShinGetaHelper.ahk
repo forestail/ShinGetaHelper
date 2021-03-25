@@ -17,17 +17,18 @@ ShowDialog:
 ; +^h::
 	ime_mode := IME_GET()
 	IME_SET(0)
-	curTypingMode := MenuTypingValue
-
-	MenuTypingValue = 0
 	InputBox, UserInput, 新下駄配列ヘルパー, 入力方法を調べたい文字のローマ字を入力`n（括弧系はkakko、記号系はkigouと入力）, , 300, 150
-	MenuTypingValue := curTypingMode
 	IME_SET(ime_mode)
 	If (ErrorLevel = 0)
 	{
 		
 		StringReplace, UserInput, UserInput, %A_Space% , , All
 		StringReplace, UserInput, UserInput, 　 , , All
+		; スペースまたはから文字が入力された場合は何も表示せずに終了する
+		If (UserInput = "")
+		{
+			return
+		}
 
 		; MsgBox, 0x40000,新下駄配列ヘルパー,% GetHelp(UserInput)
 		Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox -Resize
