@@ -28,14 +28,23 @@ ShinGetaHelper.ahkをAutoHotKeyで実行します。
 [Main]
 HKey=+^h
 EnableLog=1
+InputX=100
+InputY=
+HelpX=200
+HelpY=200
 ```
 
 |キー|値|
 |---|----|
 |HKey|新下駄配列ヘルパーを呼び出すホットキー。上記設定例はShift+Ctrl+h※|
 |EnableLog|ヘルプ提示時にログを記録するか。0：記録しない、1：記録する|
+|InputX|ローマ字入力画面の表示位置のX座標。空文字にすると画面の横方向中央。|
+|InputY|ローマ字入力画面の表示位置のY座標。空文字にすると画面の縦方向中央。|
+|HelpX|結果表示画面の表示位置のX座標。空文字にすると画面の横方向中央。|
+|HelpY|結果表示画面の表示位置のY座標。空文字にすると画面の縦方向中央。|
 
-※Shift：+　、　Ctrl：^　、　Alt：!
+※　Shift：+　、　Ctrl：^　、　Alt：!
+
 
 ## 使い方
 
