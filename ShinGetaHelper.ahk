@@ -5,10 +5,36 @@
 ;
 ;=============================
 
+Global flg_log
+Global intInputX, intInputY
+Global intHelpX, intHelpY
 ; 設定ファイル読み込み（ShinGetaHelper.ini）
 IniRead, str_hotkey, %A_ScriptDir%\ShinGetaHelper.ini, Main, HKey , +^k
-Global flg_log
 IniRead, flg_log, %A_ScriptDir%\ShinGetaHelper.ini, Main, EnableLog , 0
+IniRead, intInputX, %A_ScriptDir%\ShinGetaHelper.ini, Main, InputX , 
+IniRead, intInputY, %A_ScriptDir%\ShinGetaHelper.ini, Main, InputY , 
+IniRead, intHelpX, %A_ScriptDir%\ShinGetaHelper.ini, Main, HelpX , 200
+IniRead, intHelpY, %A_ScriptDir%\ShinGetaHelper.ini, Main, HelpY , 200
+
+; iniのInputX、InputYが空文字の場合はそれぞれの方向の中央にする。
+;      HelpX、HelpYが空文字の場合も同様だが、InputBoxはデフォルト中央なので手当不要。
+If (intHelpX is integer)
+{
+	intHelpX = X%intHelpX%
+}
+Else
+{
+	intHelpX = XCenter
+}
+
+If (intHelpY is integer)
+{
+	intHelpY = X%intHelpY%
+}
+Else
+{
+	intHelpY = YCenter
+}
 
 Hotkey, %str_hotkey%, ShowDialog
 Return
@@ -17,7 +43,7 @@ ShowDialog:
 ; +^h::
 	ime_mode := IME_GET()
 	IME_SET(0)
-	InputBox, UserInput, 新下駄配列ヘルパー, 入力方法を調べたい文字のローマ字を入力`n（括弧系はkakko、記号系はkigouと入力）, , 300, 150
+	InputBox, UserInput, 新下駄配列ヘルパー, 入力方法を調べたい文字のローマ字を入力`n（括弧系はkakko、記号系はkigouと入力）, , 300, 150, %intInputX%, %intInputY%
 	IME_SET(ime_mode)
 	If (ErrorLevel = 0)
 	{
@@ -37,7 +63,8 @@ ShowDialog:
 		Gui Font, S9
 		; Gui Add, Button,wp default , 閉じる
 		Gui Add, Button,h0 w0 default , 閉じる
-		Gui Show, X200 Y200 AutoSize, 新下駄配列ヘルパー
+		; Gui Show, X200 Y200 AutoSize, 新下駄配列ヘルパー
+		Gui Show, %intHelpX% %intHelpY% AutoSize, 新下駄配列ヘルパー
 		return
 
 		Button閉じる:
