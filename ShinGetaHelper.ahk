@@ -43,12 +43,12 @@ ShowDialog:
 ; +^h::
 	ime_mode := IME_GET()
 	IME_SET(0)
-	InputBox, UserInput, 新下駄配列ヘルパー, 入力方法を調べたい文字のローマ字を入力`n（括弧系はkakko、記号系はkigouと入力）, , 300, 150, %intInputX%, %intInputY%
+	InputBox, UserInput, 新下駄配列ヘルパー, 入力方法を調べたい文字のローマ字を入力`n（括弧系はkakko、記号系はkigouと入力）`n`n連続した文字を入力する場合はスペースで区切る（例：ta n go）, , 300, 200, %intInputX%, %intInputY%
 	IME_SET(ime_mode)
 	If (ErrorLevel = 0)
 	{
 		
-		StringReplace, UserInput, UserInput, %A_Space% , , All
+		; StringReplace, UserInput, UserInput, %A_Space% , , All
 		StringReplace, UserInput, UserInput, 　 , , All
 		; スペースまたはから文字が入力された場合は何も表示せずに終了する
 		If (UserInput = "")
@@ -56,15 +56,22 @@ ShowDialog:
 			return
 		}
 
-		; MsgBox, 0x40000,新下駄配列ヘルパー,% GetHelp(UserInput)
+		; スペース区切りで分割
+		StringSplit, arrUserInput, UserInput , %A_Space% ,
+
 		Gui, +AlwaysOnTop -MaximizeBox -MinimizeBox -Resize
 		Gui Font, S11 Q5, Meiryo
-		Gui Add, Text  ,w200 , % GetHelp(UserInput)
+		Loop, %arrUserInput0%
+		{
+			If (arrUserInput%A_Index% != "")
+			{
+				Gui Add, Text  ,w200 , % GetHelp(arrUserInput%A_Index%)
+			}
+		}
 		Gui Font, S9
-		; Gui Add, Button,wp default , 閉じる
 		Gui Add, Button,h0 w0 default , 閉じる
-		; Gui Show, X200 Y200 AutoSize, 新下駄配列ヘルパー
 		Gui Show, %intHelpX% %intHelpY% AutoSize, 新下駄配列ヘルパー
+
 		return
 
 		Button閉じる:
@@ -86,7 +93,6 @@ GetHelp(kana)
 	; ア行
 		If (kana = "a")
 		{
-			WriteLog("")
 			WriteLog("あ")
 			Return "【あ】⇒　D + J"
 		}
@@ -677,6 +683,11 @@ GetHelp(kana)
 			WriteLog("ぉ")
 			Return "【ぉ】⇒　5 + K"
 		}
+		Else If (kana = "xtu" || kana = "ltu" || kana = "ttu" || kana = "xtsu" || kana = "ltsu" || kana = "ttsu")
+		{
+			WriteLog("っ")
+			Return "【っ】⇒　G"
+		}
 		Else If (kana = "xya" || kana = "lya")
 		{
 			WriteLog("ゃ")
@@ -753,8 +764,13 @@ GetHelp(kana)
 		}
 		Else If (kana = ",")
 		{
-			WriteLog("，")
-			Return "【，】⇒　D + 7"
+			WriteLog("，、")
+			Return "【，】⇒　D + 7`n【、】⇒　R"
+		}
+		Else If (kana = ".")
+		{
+			WriteLog("．。")
+			Return "【．】⇒　S + 7`n【。】⇒　."
 		}
 		Else If (kana = ";")
 		{
@@ -765,11 +781,6 @@ GetHelp(kana)
 		{
 			WriteLog("＠")
 			Return "【＠】⇒　D + -"
-		}
-		Else If (kana = ".")
-		{
-			WriteLog("．")
-			Return "【．】⇒　S + 7"
 		}
 		Else If (kana = ";")
 		{
